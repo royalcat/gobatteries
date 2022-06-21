@@ -1,3 +1,3 @@
-module github.com/royalcat/maxcoc
+module github.com/royalcat/maxconc
 
 go 1.18
