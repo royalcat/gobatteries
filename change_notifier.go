@@ -11,6 +11,7 @@ type ChangeNotifier[T any] struct {
 	updates chan T
 
 	subscribers []chan T
+	handlers    []func(T)
 }
 
 func (p *ChangeNotifier[T]) Last() T {
@@ -32,6 +33,14 @@ func (p *ChangeNotifier[T]) Subscribe() <-chan T {
 
 }
 
+func (p *ChangeNotifier[T]) AddHandler(h ...func(T)) {
+	if p.closed {
+		return
+	}
+
+	p.handlers = append(p.handlers, h...)
+}
+
 func (p *ChangeNotifier[T]) Update(updates ...T) {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
@@ -48,6 +57,10 @@ func (p *ChangeNotifier[T]) Update(updates ...T) {
 				drain(sub)
 				sub <- update
 			}
+		}
+
+		for _, handler := range p.handlers {
+			handler(update)
 		}
 	}
 
@@ -75,6 +88,8 @@ func (p *ChangeNotifier[T]) Close() {
 		}
 		close(sub)
 	}
+
+	p.handlers = []func(T){}
 }
 
 func drain[T any](c chan T) {
