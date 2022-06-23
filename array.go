@@ -2,7 +2,7 @@ package gobatteries
 
 // operations on constant size slices
 
-func InSlice(arr []int64, val int64) bool {
+func InSlice[V comparable](arr []V, val V) bool {
 
 	for _, v := range arr {
 		if v == val {
@@ -28,7 +28,7 @@ func SliceDiff[V comparable](a, b []V) []V {
 	return diff
 }
 
-func CompareByteArrays(a, b []byte) bool {
+func CompareSlices[V comparable](a, b []V) bool {
 	if len(a) != len(b) {
 		return false
 	}
