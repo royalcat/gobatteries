@@ -1,6 +1,6 @@
 package gobatteries
 
-func PaginateInt64[V any](x []V, skip int, size int) []V {
+func Paginate[V any](x []V, skip int, size int) []V {
 	if skip > len(x) {
 		skip = len(x)
 	}
@@ -13,7 +13,7 @@ func PaginateInt64[V any](x []V, skip int, size int) []V {
 	return x[skip:end]
 }
 
-func PaginateInt64Invert[V any](x []V, skip int, size int) []V {
+func PaginateInvert[V any](x []V, skip int, size int) []V {
 	if size < 0 || skip < 0 {
 		return []V{}
 	}
@@ -32,4 +32,24 @@ func PaginateInt64Invert[V any](x []V, skip int, size int) []V {
 		out = append(out, x[i])
 	}
 	return out
+}
+
+// Split slice in chunks of constant size
+// based on https://stackoverflow.com/a/67011816
+func Chunks[V any](xs []V, chunkSize int) [][]V {
+	if len(xs) == 0 {
+		return nil
+	}
+	divided := make([][]V, (len(xs)+chunkSize-1)/chunkSize)
+	prev := 0
+	i := 0
+	till := len(xs) - chunkSize
+	for prev < till {
+		next := prev + chunkSize
+		divided[i] = xs[prev:next]
+		prev = next
+		i++
+	}
+	divided[i] = xs[prev:]
+	return divided
 }
