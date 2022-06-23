@@ -1,4 +1,4 @@
-package maxconc
+package gobatteries
 
 import (
 	"sync"
