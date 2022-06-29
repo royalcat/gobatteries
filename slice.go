@@ -37,6 +37,9 @@ func PaginateInvert[V any](x []V, skip int, size int) []V {
 // Split slice in chunks of constant size
 // based on https://stackoverflow.com/a/67011816
 func Chunks[V any](xs []V, chunkSize int) [][]V {
+	if chunkSize < 1 {
+		return [][]V{xs}
+	}
 	if len(xs) == 0 {
 		return nil
 	}

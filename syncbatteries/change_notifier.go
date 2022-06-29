@@ -2,6 +2,8 @@ package gobatteries
 
 import (
 	"sync"
+
+	"github.com/royalcat/gobatteries"
 )
 
 type ChangeNotifier[T any] struct {
@@ -54,7 +56,7 @@ func (p *ChangeNotifier[T]) Update(updates ...T) {
 			if len(sub) == 0 {
 				sub <- update
 			} else {
-				drain(sub)
+				gobatteries.Drain(sub)
 				sub <- update
 			}
 		}
@@ -78,7 +80,7 @@ func (p *ChangeNotifier[T]) Close() {
 
 	for _, sub := range p.subscribers {
 		if len(sub) == 1 { // give a chance to slower readers to read
-			drain(sub)
+			gobatteries.Drain(sub)
 			close(sub)
 		}
 
@@ -90,10 +92,4 @@ func (p *ChangeNotifier[T]) Close() {
 	}
 
 	p.handlers = []func(T){}
-}
-
-func drain[T any](c chan T) {
-	//drain the channel
-	for range c {
-	}
 }
