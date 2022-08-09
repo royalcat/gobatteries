@@ -39,3 +39,15 @@ func CompareSlices[V comparable](a, b []V) bool {
 	}
 	return true
 }
+
+func SliceUnique[V comparable](s []V) []V {
+	keys := make(map[V]bool, len(s))
+	list := make([]V, 0, len(s))
+	for _, entry := range s {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return s
+}

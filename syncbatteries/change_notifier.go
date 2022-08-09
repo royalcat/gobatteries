@@ -1,4 +1,4 @@
-package gobatteries
+package syncbatteries
 
 import (
 	"sync"
